@@ -1,0 +1,46 @@
+.theme-light {
+  --bg-surface: var(--surface);
+  --text-primary: var(--on-background);
+  --card-surface: var(--surface-container-high);
+}
+
+.theme-dark {
+  --bg-surface: var(--dark-bg);
+  --text-primary: var(--dark-text);
+  --card-surface: var(--dark-card);
+}
+
+body.theme-light {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+body.theme-dark {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.theme-dark .card-light {
+  background: var(--dark-card);
+  border-color: var(--dark-card-border);
+  color: var(--dark-text);
+}
+
+.theme-dark .input-field {
+  background: #141727;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--dark-text);
+}
+
+.theme-dark .btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--dark-text);
+}
+
+.theme-dark .btn-ghost {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.theme-dark .chip {
+  background: rgba(255, 255, 255, 0.08);
+}
