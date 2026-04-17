@@ -3,8 +3,8 @@
 //  Functional Fitness — SPA Router (History API)
 // ─────────────────────────────────────────────
 
-import { getSession, getSupabaseClient } from './auth.js';
-import { api } from './api.js';
+import { getSession, supabase, signOut } from './auth.js';
+import { apiFetch } from './api.js';
 
 // ── Pages (lazy-like imports — each returns { render, init }) ──────────────
 import * as LoginPage from './pages/login.js';
@@ -13,6 +13,7 @@ import * as DashboardPage from './pages/dashboard.js';
 import * as AdminPage from './pages/admin/index.js';
 import * as UserDetailPage from './pages/admin/userDetail.js';
 
+   
 // ── Route map ─────────────────────────────────────────────────────────────
 //    path          component       protected  adminOnly
 const ROUTES = [
@@ -24,13 +25,19 @@ const ROUTES = [
     },
     {
         path: '/login',
-        component: LoginPage,
+        component: {
+            render: LoginPage.loginPage,
+            init: LoginPage.loginPageInit,
+        },
         protected: false,
         adminOnly: false,
     },
     {
         path: '/register',
-        component: RegisterPage,
+        component: {
+            render: RegisterPage.registerPage,
+            init: RegisterPage.initRegisterPage,
+        },
         protected: false,
         adminOnly: false,
     },
@@ -88,7 +95,7 @@ export async function getCurrentUser() {
 
     try {
         // /api/auth/me returns { id, email, role, first_name, last_name, phone }
-        const me = await api('/auth/me');            // from api.js (adds Bearer token)
+        const me = await apiFetch('/auth/me');            // from api.js (adds Bearer token)
         _currentUser = { session, ...me };
         return _currentUser;
     } catch {
@@ -206,8 +213,7 @@ export function navigate(path, replace = false) {
 //  Clears cached user + Supabase session, then redirects to /login.
 export async function logout() {
     _currentUser = null;
-    const supabase = getSupabaseClient();
-    await supabase.auth.signOut();
+    await signOut()
     navigate('/login', true);
 }
 
