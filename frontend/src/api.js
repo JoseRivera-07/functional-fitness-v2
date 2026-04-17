@@ -16,6 +16,7 @@ if (!API_URL) {
 
 export async function apiFetch(path, options = {}) {
     const token = await getAccessToken();
+    console.log("TOKEN:", token);
 
     const headers = {
         'Content-Type': 'application/json',

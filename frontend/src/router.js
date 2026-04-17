@@ -95,7 +95,7 @@ export async function getCurrentUser() {
 
     try {
         // /api/auth/me returns { id, email, role, first_name, last_name, phone }
-        const me = await apiFetch('/auth/me');            // from api.js (adds Bearer token)
+        const me = await apiFetch('api/auth/me');            // from api.js (adds Bearer token)
         _currentUser = { session, ...me };
         return _currentUser;
     } catch {

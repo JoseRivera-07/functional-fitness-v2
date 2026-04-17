@@ -1,5 +1,5 @@
 import { signIn } from '../auth.js';
-import { getMe } from '../api.js';
+import { navigate } from '../router.js';
 
 // ─── HTML ────────────────────────────────────────────────────────────────────
 
@@ -75,7 +75,7 @@ export function loginPage() {
 
 // ─── CSS (inyectado una sola vez) ────────────────────────────────────────────
 
-const AUTH_STYLES_ID = 'auth-styles';
+// const AUTH_STYLES_ID = 'auth-styles';
 
 function injectAuthStyles() {
   if (document.getElementById(AUTH_STYLES_ID)) return;
@@ -306,7 +306,6 @@ async function handleLoginSubmit(e) {
 
     if (error) {
       const globalError = document.getElementById('login-global-error');
-      // Traducir errores comunes de Supabase
       const msg =
         error.message?.includes('Invalid login')
           ? 'Correo o contraseña incorrectos.'
@@ -317,15 +316,13 @@ async function handleLoginSubmit(e) {
       return;
     }
 
-    // Obtener rol desde el backend
-    const profile = await getMe();
-    const role = profile?.role;
-
-    if (role === 'admin') {
-      window.location.href = '/admin';
-    } else {
-      window.location.href = '/dashboard';
+    if (!data?.session?.access_token) {
+      const globalError = document.getElementById('login-global-error');
+      if (globalError) globalError.textContent = 'No se pudo obtener el token de sesión. Intenta nuevamente.';
+      return;
     }
+
+    navigate('/dashboard');
   } catch (err) {
     const globalError = document.getElementById('login-global-error');
     if (globalError) globalError.textContent = 'Error de conexión. Intenta más tarde.';
@@ -337,7 +334,7 @@ async function handleLoginSubmit(e) {
 
 // ─── Inicialización ───────────────────────────────────────────────────────────
 
-export function initLoginPage() {
+export function loginPageInit() {
   // Asegurar tema oscuro en esta página
   document.body.className = 'theme-dark';
 
